@@ -1,0 +1,41 @@
+# --- Python / FastAPI ---
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+*.pyo
+*.egg-info/
+.eggs/
+.build/
+dist/
+build/
+.env
+.env.*
+.venv/
+.python-version
+*.log
+
+# Herramientas / QA
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.tox/
+
+# DB / datos locales
+*.sqlite
+*.db
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+
+# SO
+.DS_Store
+Thumbs.db
+
+# Docker (archivos locales)
+docker-compose.override.yml
