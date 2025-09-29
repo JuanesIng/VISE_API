@@ -11,9 +11,9 @@ class PurchaseRequest(BaseModel):
 
 class PurchaseSummary(BaseModel):
     clientId: int
-    originalAmount: Decimal
-    discountApplied: Decimal
-    finalAmount: Decimal
+    originalAmount: float
+    discountApplied: float
+    finalAmount: float
     benefit: str | None = None
 
 class PurchaseOK(BaseModel):
