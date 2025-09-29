@@ -1,40 +1,58 @@
 # Nombre de la action
 name: Build container and run VISE API testing
- # Bajo que acción se va a ejecutar la action (en este caso manual)
-on:
-    workflow_dispatch:
- # A la hora de ejecutar la acción pedir los siguientes atributos
-        inputs:
-            PORT:
-                description: 'The port of your application'
-                required: true
-                default: "8000"
- # Tareas a ejecutar
-jobs:
-    test:
- # SO de la maquina virtual
-        runs-on: ubuntu-latest
- # Pasos a seguir
-        steps:
- # Descargar el código del repositorio
-            - name: Checkout repository
-              uses: actions/checkout@v4
- # Instalar docker
-            - name: Setup docker
-              uses: docker/setup-buildx-action@v3
-# Construir imagen de docker
-            - name: Build docker image
-              run: |
-                docker build -t vise-api:latest .
- # Levantar contenedor
-            - name: Run container
-              run: |
-                docker run -d -p ${{ github.event.inputs.PORT }}:${{ github.event.inputs.PORT }} \
-                  --name vise-api vise-api:latest
-                sleep 5
 
- # Instalar hurl
-            - name: Setup hurl (API testing tool)
-              uses: gacts/install-hurl@v1
-            - name: Test API
-              run: hurl --variable host=http://localhost:${{ github.event.inputs.PORT }} --error-format long --test session.hurl
+on:
+  workflow_dispatch:
+    inputs:
+      PORT:
+        description: 'The port of your application'
+        required: true
+        default: "8000"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Descargar el código del repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Instalar docker
+      - name: Setup docker
+        uses: docker/setup-buildx-action@v3
+
+      # Construir imagen de docker
+      - name: Build docker image
+        run: |
+          docker build -t vise-api:latest .
+
+      # Levantar contenedor
+      - name: Run container
+        run: |
+          docker run -d -p ${{ github.event.inputs.PORT }}:8000 \
+            --name vise-api vise-api:latest
+
+      # Esperar a que la API esté lista
+      - name: Wait for API to be ready
+        run: |
+          for i in {1..10}; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:${{ github.event.inputs.PORT }}/docs)
+            if [ "$status" -eq 200 ]; then
+              echo "API is ready!"
+              exit 0
+            fi
+            echo "Waiting for API..."
+            sleep 3
+          done
+          echo "API did not start in time"
+          docker logs vise-api
+          exit 1
+
+      # Instalar hurl
+      - name: Setup hurl (API testing tool)
+        uses: gacts/install-hurl@v1
+
+      # Ejecutar pruebas con hurl
+      - name: Test API
+        run: hurl --variable host=http://localhost:${{ github.event.inputs.PORT }} --error-format long --test session.hurl
