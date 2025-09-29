@@ -33,22 +33,6 @@ jobs:
           docker run -d -p ${{ github.event.inputs.PORT }}:8000 \
             --name vise-api vise-api:latest
 
-      # Esperar a que la API esté lista
-      - name: Wait for API to be ready
-        run: |
-          for i in {1..10}; do
-            status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:${{ github.event.inputs.PORT }}/docs)
-            if [ "$status" -eq 200 ]; then
-              echo "API is ready!"
-              exit 0
-            fi
-            echo "Waiting for API..."
-            sleep 3
-          done
-          echo "API did not start in time"
-          docker logs vise-api
-          exit 1
-
       # Instalar hurl
       - name: Setup hurl (API testing tool)
         uses: gacts/install-hurl@v1
