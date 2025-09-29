@@ -37,4 +37,4 @@ jobs:
             - name: Setup hurl (API testing tool)
               uses: gacts/install-hurl@v1
             - name: Test API
-              run: hurl --variable host=http://localhost:${{ github.event.inputs.PORT }}--error-format long --test session.hurl
+              run: hurl --variable host=http://localhost:${{ github.event.inputs.PORT }} --error-format long --test session.hurl
