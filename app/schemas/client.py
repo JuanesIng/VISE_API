@@ -5,7 +5,7 @@ from app.models.enums import CardType
 class ClientCreate(BaseModel):
     name: str = Field(..., examples=["Juanito Doue"])
     country: str = Field(..., examples=["FRANCIA"])
-    monthlyIncome: Decimal = Field(..., gt=0, examples=[1200])
+    monthlyIncome: float = Field(..., gt=0, examples=[1200])
     viseClub: bool = Field(..., examples=[True])
     cardType: CardType = Field(..., examples=[CardType.PLATINUM])
 
