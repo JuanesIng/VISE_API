@@ -29,7 +29,9 @@ jobs:
  # Levantar contenedor
             - name: Run container
               run: |
-                docker run -d -p ${{ github.event.inputs.PORT }}: ${{ github.event.inputs.PORT }} --name vise-api vise-api:latest sleep 5
+                docker run -d -p ${{ github.event.inputs.PORT }}:
+                ${{ github.event.inputs.PORT }} --name vise-api vise-api:latest
+                sleep 5
 
  # Instalar hurl
             - name: Setup hurl (API testing tool)
