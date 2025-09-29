@@ -15,7 +15,7 @@ class InMemoryClientRepository(ClientRepository):
             id=self._seq,
             name=data.name,
             country=data.country,
-            monthly_income=Decimal(str(data.monthlyIncome)),
+            monthly_income=float(str(data.monthlyIncome)),
             vise_club=data.viseClub,
             card_type=CardType(data.cardType)
         )

@@ -20,7 +20,7 @@ class PurchaseService:
         weekday = dt.weekday()           # 0=Lun ... 6=Dom
         is_foreign = (req.purchaseCountry != client.country)
 
-        amount = Decimal(str(req.amount))
+        amount = float(str(req.amount))
         pct, label = self.rules.compute_benefit(
             card=client.card_type,
             amount=amount,

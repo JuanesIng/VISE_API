@@ -6,6 +6,6 @@ class Client(BaseModel):
     id: int
     name: str
     country: str
-    monthly_income: Decimal
+    monthly_income: float
     vise_club: bool
     card_type: CardType
