@@ -3,7 +3,3 @@ from app.api.routes import router as api_router
 
 app = FastAPI(title="VISE Payments API", version="1.0.0")
 app.include_router(api_router)
-
-@app.get("/", tags=["health"])
-def health():
-    return {"status": "ok", "service": "vise-api"}
